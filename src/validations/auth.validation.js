@@ -25,9 +25,8 @@ const registerValidation = [
 const loginValidation = [
   body('email')
     .trim()
-    .isEmail()
-    .withMessage('A valid email address is required')
-    .normalizeEmail(),
+    .notEmpty()
+    .withMessage('Please provide your email address or Cadet ID'),
   body('password')
     .notEmpty()
     .withMessage('Password is required')
