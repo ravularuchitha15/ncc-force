@@ -1,38 +1,55 @@
-# Smart NCC Cadet Management System — Backend API
+# Smart NCC Cadet Management System — NCC Force
 
-A secure, scalable, and production-ready **Node.js / Express / MongoDB** backend for the **Smart NCC Cadet Management System**. This platform digitizes and centralizes the administration of National Cadet Corps (NCC) cadets, officers, attendance, training programs, camps, ranks, certificates, achievements, and official performance evaluations.
+[![Live on Firebase](https://img.shields.io/badge/Live%20Demo-Firebase%20Hosting-blue?logo=firebase)](https://ncc-force-7acd3.web.app)
+[![GitHub Repository](https://img.shields.io/badge/GitHub-Repository-181717?logo=github)](https://github.com/ravularuchitha15/ncc-force)
+[![Node.js Version](https://img.shields.io/badge/Node.js-18%2B%20%7C%2020%2B-green?logo=node.js)](https://nodejs.org/)
+[![React Version](https://img.shields.io/badge/React-19-61DAFB?logo=react)](https://react.dev/)
+
+An enterprise-grade, full-stack monorepo system for the **National Cadet Corps (NCC)**. Digitizes and centralizes cadet dossiers, officer command dashboards, automated attendance, camp management, training modules, hierarchical promotions, accredited certificates, and official qualitative performance appraisals.
 
 ---
 
-## 🚀 Key Features & Highlights
+## 🌐 Live Deployments & Repository Links
 
-- **Role-Based Access Control (RBAC):** Strict authorization separation across **Admin**, **NCC Officer**, and **Cadet**.
-- **Cadet Dossier Management:** Complete records including Cadet ID, battalion, unit, rank, blood group, emergency contacts, profile photos, and status lifecycle.
-- **Attendance & Duplicate Prevention:** Daily/session attendance with compound unique indexing (`{ cadet, date, sessionName }`) to prevent duplicate entries, plus automated percentage calculations.
-- **Promotion & Rank History:** Hierarchical rank definitions with full audit trails (`RankHistory`) recording every promotion, reason, and approving officer.
-- **Training & Camps:** Lifecycle management for drills, weapon training, obstacle courses, CATC, RDC, and TSC camps with participant assignment rosters.
-- **Certificates & Achievements:** Upload and verify official 'A', 'B', 'C' certificates and competitive honors with secure file downloads and MIME validation.
-- **Performance Appraisals:** Official qualitative grading (Parade, Discipline, Leadership, Physical Training, Overall Remarks) without arbitrary auto-generated scores.
-- **Dedicated Dashboards:** Real-time summary views for Officers (unit-wide metrics, upcoming schedules) and Cadets (personal profile, attendance rate, enrolled events).
-- **Hardened Security:** `helmet`, `cors`, `express-rate-limit`, `bcryptjs` password hashing, signed JWT tokens, and strict `express-validator` schemas.
+- **Live Web Application**: [https://ncc-force-7acd3.web.app](https://ncc-force-7acd3.web.app)
+- **Secondary Domain**: [https://ncc-force-7acd3.firebaseapp.com](https://ncc-force-7acd3.firebaseapp.com)
+- **GitHub Repository**: [https://github.com/ravularuchitha15/ncc-force](https://github.com/ravularuchitha15/ncc-force)
+- **Firebase Project Console**: [NCC Force (ncc-force-7acd3)](https://console.firebase.google.com/project/ncc-force-7acd3/overview)
+
+---
+
+## 🚀 Key Features
+
+### Officer Command Center
+- **360° Cadet Dossiers**: Complete records with regimental numbers, wing, rank, battalion, institution, blood group, emergency contacts, and status tracking.
+- **Platoon & Session Attendance**: Fast bulk attendance marking with duplicate-entry prevention and automated percentage metrics.
+- **Camp Administration**: Manage ATC, RDC, CATC, and Trekking camps with participant rosters and performance logs.
+- **Training Programs**: Schedule sessions, weapon training, drill lessons, and assign cadet platoons.
+- **Rank Promotion Audit Trail**: Strict multi-level rank promotion system with permanent `RankHistory` logging.
+- **Certificate Verification**: Upload, issue, and securely stream official 'A', 'B', and 'C' certificates.
+- **Operational Reports**: Exportable reports for attendance, camps, training, and achievements.
+
+### Cadet Portal
+- **Personal Dashboard**: Real-time attendance rate, upcoming sessions, camp registrations, and current rank badge.
+- **Self-Service Actions**: View attendance logs, enroll in upcoming camps, track training scores, and download certificates.
+- **Leave Application & Tracking**: Submit leave requests with reasons and track officer approvals in real time.
+
+### Security & Architecture
+- **Dual Authentication**: Native signed JWT sessions + Firebase Authentication (Google Sign-In).
+- **Hardened Security**: Helmet HTTP headers, CORS origin control, Express Rate Limiting, and Bcrypt password hashing.
+- **Unified Monorepo**: Single-port production serving (Express serves Vite React build with SPA client-side fallback).
 
 ---
 
 ## 🛠️ Technology Stack
 
-| Technology | Purpose |
+| Layer | Technologies |
 | :--- | :--- |
-| **Node.js** | Server-side JavaScript runtime (v18+) |
-| **Express.js** | RESTful HTTP Web Framework |
-| **MongoDB & Mongoose** | NoSQL Document Database & ODM |
-| **Firebase Admin SDK** | Firebase Auth (ID tokens), Cloud Storage, and FCM push notifications |
-| **JWT (jsonwebtoken)** | Stateless Bearer token authentication |
-| **bcryptjs** | Salted cryptographic password hashing |
-| **Multer** | Secure multipart file uploads with size and MIME filters |
-| **Express Validator** | Declarative request payload validation |
-| **Helmet & CORS** | HTTP security headers and Cross-Origin control |
-| **Jest & Supertest** | Automated integration and unit testing |
-| **mongodb-memory-server** | Zero-config in-memory database for testing |
+| **Frontend** | React 19, Vite, Tailwind CSS, Lucide Icons, Recharts, React Router v6, React Hot Toast |
+| **Backend** | Node.js (v18+), Express 5, Mongoose 9, JWT, Multer, Express Validator |
+| **Database** | MongoDB (with automatic zero-config in-memory fallback for local dev) |
+| **Cloud & Auth** | Firebase Admin SDK, Firebase Web SDK (Auth, Hosting, Analytics, FCM) |
+| **Testing** | Jest, Supertest, mongodb-memory-server |
 
 ---
 
@@ -40,293 +57,106 @@ A secure, scalable, and production-ready **Node.js / Express / MongoDB** backend
 
 ```
 ncc-backend/
-├── .env.example                     # Environment template
-├── .env                             # Local environment variables
-├── package.json                     # Dependencies & scripts
-├── postman_collection.json          # Ready-to-import Postman Collection
-├── README.md                        # Documentation
-├── server.js                        # App entry point & graceful shutdown
-├── src/
-│   ├── app.js                       # Express configuration & middlewares
-│   ├── config/
-│   │   ├── db.js                    # MongoDB connection handler
-│   │   └── constants.js             # Roles, status enums, blood groups
-│   ├── controllers/                 # MVC Controllers
-│   │   ├── achievement.controller.js
-│   │   ├── attendance.controller.js
-│   │   ├── auth.controller.js
-│   │   ├── cadet.controller.js
-│   │   ├── camp.controller.js
-│   │   ├── dashboard.controller.js
-│   │   ├── performance.controller.js
-│   │   ├── rank.controller.js
-│   │   ├── training.controller.js
-│   │   └── user.controller.js
-│   ├── middlewares/                 # Security, auth & error handlers
-│   │   ├── auth.middleware.js       # JWT extraction & user hydration
-│   │   ├── error.middleware.js      # Global error & duplicate key handler
-│   │   ├── rateLimiter.middleware.js# General and auth rate limiting
-│   │   ├── role.middleware.js       # RBAC authorization
-│   │   ├── upload.middleware.js     # Multer file filter & disk storage
-│   │   └── validate.middleware.js   # express-validator runner
-│   ├── models/                      # Mongoose Schema Definitions
-│   │   ├── Achievement.js
-│   │   ├── Attendance.js
-│   │   ├── Cadet.js
-│   │   ├── Camp.js
-│   │   ├── Performance.js
-│   │   ├── Rank.js
-│   │   ├── RankHistory.js
-│   │   ├── Training.js
-│   │   ├── Unit.js
-│   │   └── User.js
-│   ├── routes/                      # Express Router Modules
-│   │   ├── achievement.routes.js
-│   │   ├── attendance.routes.js
-│   │   ├── auth.routes.js
-│   │   ├── cadet.routes.js
-│   │   ├── camp.routes.js
-│   │   ├── certificate.routes.js
-│   │   ├── dashboard.routes.js
-│   │   ├── index.js
-│   │   ├── performance.routes.js
-│   │   ├── rank.routes.js
-│   │   ├── training.routes.js
-│   │   └── user.routes.js
-│   ├── seeds/
-│   │   └── seed.js                  # Database seeder with sample data
-│   ├── utils/
-│   │   ├── apiError.js              # Operational error class
-│   │   ├── apiResponse.js           # Standard JSON response formatter
-│   │   └── fileHelper.js            # Safe file unlink and dir setup
-│   └── validations/                 # express-validator schemas
-├── tests/                           # Automated test suite
-│   ├── attendance.test.js
-│   ├── auth.test.js
-│   ├── cadet.test.js
-│   ├── dashboard.test.js
-│   └── setup.js
-└── uploads/                         # Stored uploads
-    ├── achievements/
-    ├── certificates/
-    └── profiles/
+├── client/                          # React + Vite Frontend
+│   ├── src/
+│   │   ├── components/              # Shared UI, layouts, modals, badges
+│   │   ├── config/firebase.js       # Client Firebase Web SDK configuration
+│   │   ├── context/AuthContext.jsx  # Authentication state & Google sign-in
+│   │   ├── pages/
+│   │   │   ├── officer/             # Officer command pages (10 modules)
+│   │   │   ├── cadet/               # Cadet self-service pages (7 modules)
+│   │   │   ├── public/              # Landing page, role select, login views
+│   │   │   └── shared/              # Achievements, Calendar, Settings
+│   │   └── services/                # Axios API clients for all backend endpoints
+│   ├── dist/                        # Production frontend build
+│   ├── vite.config.js               # Dev server & reverse proxy configuration
+│   └── package.json
+├── src/                             # Express REST API Backend
+│   ├── config/                      # MongoDB, Firebase Admin, and constants
+│   ├── controllers/                 # Business logic controllers
+│   ├── middlewares/                 # Auth, RBAC, Rate Limiting, File Uploads
+│   ├── models/                      # Mongoose data schemas
+│   ├── routes/                      # Modular API routes
+│   ├── seeds/seed.js                # Database seeder with sample accounts
+│   └── utils/                       # ApiError, ApiResponse, file helpers
+├── tests/                           # Jest API integration tests
+├── firebase.json                    # Firebase Hosting configuration
+├── .firebaserc                      # Firebase project association
+├── server.js                        # HTTP server entry point & graceful shutdown
+└── package.json                     # Monorepo orchestration scripts
 ```
 
 ---
 
-## ⚡ Getting Started
+## ⚡ Quick Start
 
-### 1. Prerequisites
-- **Node.js** (v18.x or later)
-- **MongoDB** (Local instance running at `mongodb://localhost:27017` or a MongoDB Atlas URI)
-
-### 2. Environment Configuration
-Copy `.env.example` to `.env`:
+### 1. Clone Repository
 ```bash
-cp .env.example .env
-```
-Ensure the `MONGO_URI` is correctly set.
-
-### 3. Firebase Setup (Optional / Configurable)
-The backend seamlessly integrates **Firebase Admin SDK** for Firebase Authentication, Cloud Storage, and Push Notifications (FCM). If unconfigured, the server automatically runs in local fallback mode.
-
-#### Supplying Firebase Credentials (choose one):
-1. **Service Account File (Recommended)**:
-   - Generate a private key JSON file from the [Firebase Console](https://console.firebase.google.com/) -> *Project Settings* -> *Service Accounts*.
-   - Save the file as `serviceAccountKey.json` in the project root (or set `FIREBASE_SERVICE_ACCOUNT_PATH`).
-2. **Environment Variables**:
-   ```env
-   FIREBASE_PROJECT_ID=your-project-id
-   FIREBASE_CLIENT_EMAIL=your-service-account@your-project.iam.gserviceaccount.com
-   FIREBASE_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\n...\n-----END PRIVATE KEY-----\n"
-   FIREBASE_STORAGE_BUCKET=your-project-id.appspot.com
-   ```
-
-#### Switching Storage Driver:
-Set `STORAGE_DRIVER=firebase` in `.env` to upload cadet photos, certificates, and achievements directly to Google Cloud / Firebase Storage. Set to `local` (default) to keep files stored in the local `uploads/` directory.
-
-### 4. Install Dependencies
-```bash
-npm install
+git clone https://github.com/ravularuchitha15/ncc-force.git
+cd ncc-force
 ```
 
-### 5. Seed the Database
-Populate initial NCC Ranks, Units, Admin account, sample Officers, Cadets, Attendance, Camps, and Trainings:
+### 2. Install Dependencies
 ```bash
-npm run seed
+npm run build
+```
+*(Installs both root and client dependencies and compiles the frontend bundle.)*
+
+### 3. Run Locally
+
+#### Option A: Unified Full-Stack Server (Recommended)
+Runs both frontend and backend on a single port (`http://localhost:5000`):
+```bash
+npm start
 ```
 
-#### Pre-seeded Default Accounts:
-| Role | Email | Password | Details |
+#### Option B: Development Mode (with Hot Reloading)
+Runs nodemon for backend and Vite dev server concurrently:
+```bash
+npm run dev:full
+```
+- **Backend API**: `http://localhost:5000`
+- **Frontend App**: `http://localhost:5173`
+
+---
+
+## 🔑 Pre-Seeded Demo Credentials
+
+| Role | Email | Password | Access Details |
 | :--- | :--- | :--- | :--- |
-| **Admin** | `admin@ncc.gov.in` | `Password@123` | Full system governance |
 | **Officer** | `officer.sharma@ncc.gov.in` | `Password@123` | Major Rajesh Sharma (1 KAR BN) |
 | **Officer** | `officer.verma@ncc.gov.in` | `Password@123` | Captain Priya Verma (1 KAR BN) |
 | **Cadet** | `cadet.rahul@ncc.gov.in` | `Password@123` | Sergeant Rahul Nair |
 | **Cadet** | `cadet.ananya@ncc.gov.in` | `Password@123` | Corporal Ananya Sen |
 | **Cadet** | `cadet.amit@ncc.gov.in` | `Password@123` | Cadet Amit Patel |
-
-### 6. Start the Server
-- **Development (with hot reload):**
-  ```bash
-  npm run dev
-  ```
-- **Production:**
-  ```bash
-  npm start
-  ```
-
-Server runs by default at `http://localhost:5000`.
+| **Admin** | `admin@ncc.gov.in` | `Password@123` | Full system administrator |
 
 ---
 
 ## 🧪 Automated Testing
 
-The backend includes comprehensive test coverage using **Jest**, **Supertest**, and an in-memory database (`mongodb-memory-server`), so tests run without touching your external database:
-
+Run the automated backend test suite (uses embedded in-memory MongoDB):
 ```bash
 npm test
 ```
+- **Test Suites**: 5 passed, 5 total
+- **Tests**: 25 passed, 25 total
 
 ---
 
-## 📬 Postman API Collection
+## ☁️ Deployment
 
-Import the included `postman_collection.json` file directly into Postman.
-
-- Includes pre-configured environment variables (`{{baseUrl}}` and `{{token}}`).
-- Automatically updates `{{token}}` in collection variables when logging in as Admin, Officer, or Cadet.
-- Contains ready-to-run requests for all endpoints with sample JSON payloads.
-
----
-
-## 📡 REST API Reference
-
-All successful responses follow the format:
-```json
-{
-  "success": true,
-  "message": "Action completed successfully",
-  "data": { ... },
-  "pagination": { ... } // optional
-}
+### Deploy Frontend to Firebase Hosting
+```bash
+npm run deploy:firebase
 ```
 
-### Authentication (`/api/auth`)
-| Method | Endpoint | Access | Description |
-| :--- | :--- | :--- | :--- |
-| `POST` | `/api/auth/register` | Public / Admin | Register user account |
-| `POST` | `/api/auth/login` | Public | Login and receive signed JWT |
-| `POST` | `/api/auth/firebase-login` | Public | Login with Firebase ID token (Google Sign-In / Mobile) |
-| `POST` | `/api/auth/logout` | Private | Logout session |
-| `GET` | `/api/auth/me` | Private | Retrieve current user profile |
-| `POST` | `/api/auth/forgot-password` | Public | Generate password reset token |
-| `POST` | `/api/auth/reset-password/:token` | Public | Reset password with token |
-| `PUT` | `/api/auth/change-password` | Private | Update account password |
-
-### User Management (`/api/users`)
-| Method | Endpoint | Access | Description |
-| :--- | :--- | :--- | :--- |
-| `GET` | `/api/users` | Admin | List users with pagination and search |
-| `POST` | `/api/users/officer` | Admin | Provision a new NCC Officer account |
-| `GET` | `/api/users/:id` | Admin | Get single user details |
-| `PUT` | `/api/users/:id/role` | Admin | Update user role |
-| `PATCH` | `/api/users/:id/status` | Admin | Activate or deactivate account |
-| `DELETE` | `/api/users/:id` | Admin | Delete user account |
-
-### Cadet Management (`/api/cadets`)
-| Method | Endpoint | Access | Description |
-| :--- | :--- | :--- | :--- |
-| `POST` | `/api/cadets` | Officer, Admin | Create cadet profile (supports photo upload) |
-| `GET` | `/api/cadets` | Officer, Admin | Search/filter cadets (pagination, unit, rank, status) |
-| `GET` | `/api/cadets/:id` | Private | View cadet profile |
-| `GET` | `/api/cadets/me/profile` | Cadet | Cadet views own profile |
-| `PATCH` | `/api/cadets/me/update` | Cadet | Cadet updates permitted info (phone, address, photo) |
-| `PUT` | `/api/cadets/:id` | Officer, Admin | Full update of cadet details |
-| `DELETE` | `/api/cadets/:id` | Officer, Admin | Deactivate or delete cadet |
-
-### Attendance (`/api/attendance`)
-| Method | Endpoint | Access | Description |
-| :--- | :--- | :--- | :--- |
-| `POST` | `/api/attendance` | Officer, Admin | Mark single attendance record (duplicate check enforced) |
-| `POST` | `/api/attendance/bulk` | Officer, Admin | Mark attendance for entire platoon/batch |
-| `GET` | `/api/attendance` | Officer, Admin | Filter attendance by date range, cadet, session, status |
-| `GET` | `/api/attendance/cadet/:cadetId` | Private | View cadet attendance summary & attendance % |
-| `PUT` | `/api/attendance/:id` | Officer, Admin | Update attendance status/remarks |
-| `DELETE` | `/api/attendance/:id` | Officer, Admin | Remove attendance record |
-
-### Training Management (`/api/training`)
-| Method | Endpoint | Access | Description |
-| :--- | :--- | :--- | :--- |
-| `POST` | `/api/training` | Officer, Admin | Create training program |
-| `GET` | `/api/training` | Private | List training sessions |
-| `GET` | `/api/training/:id` | Private | Get training session details |
-| `GET` | `/api/training/my-trainings` | Cadet | Cadet views assigned trainings |
-| `PUT` | `/api/training/:id` | Officer, Admin | Update training session |
-| `POST` | `/api/training/:id/assign` | Officer, Admin | Assign cadets to training |
-| `DELETE` | `/api/training/:id/cadets/:cadetId` | Officer, Admin | Remove cadet from session |
-| `DELETE` | `/api/training/:id` | Officer, Admin | Delete training session |
-
-### Camp Management (`/api/camps`)
-| Method | Endpoint | Access | Description |
-| :--- | :--- | :--- | :--- |
-| `POST` | `/api/camps` | Officer, Admin | Create NCC camp |
-| `GET` | `/api/camps` | Private | List camps (filter by type, status, dates) |
-| `GET` | `/api/camps/:id` | Private | Get camp details |
-| `GET` | `/api/camps/my-camps` | Cadet | Cadet views enrolled camps |
-| `PUT` | `/api/camps/:id` | Officer, Admin | Update camp details |
-| `POST` | `/api/camps/:id/register-cadets` | Officer, Admin | Register cadets for camp |
-| `DELETE` | `/api/camps/:id/cadets/:cadetId` | Officer, Admin | Remove cadet from camp roster |
-| `DELETE` | `/api/camps/:id` | Officer, Admin | Delete camp |
-
-### Rank Management (`/api/ranks`)
-| Method | Endpoint | Access | Description |
-| :--- | :--- | :--- | :--- |
-| `GET` | `/api/ranks` | Private | List NCC rank hierarchy |
-| `POST` | `/api/ranks` | Officer, Admin | Create rank definition |
-| `POST` | `/api/ranks/promote/:cadetId` | Officer, Admin | Promote cadet & create RankHistory audit |
-| `GET` | `/api/ranks/history/:cadetId` | Private | View cadet promotion audit trail |
-
-### Certificate Management (`/api/certificates`)
-| Method | Endpoint | Access | Description |
-| :--- | :--- | :--- | :--- |
-| `POST` | `/api/certificates` | Officer, Admin | Issue and upload certificate (PDF, JPG, PNG) |
-| `GET` | `/api/certificates` | Private | List certificates (cadets view only own) |
-| `GET` | `/api/certificates/:id` | Private | Get certificate details |
-| `GET` | `/api/certificates/:id/download` | Private | Secure authorized document download |
-| `PUT` | `/api/certificates/:id` | Officer, Admin | Update certificate metadata |
-| `DELETE` | `/api/certificates/:id` | Officer, Admin | Delete certificate and document |
-
-### Achievements (`/api/achievements`)
-| Method | Endpoint | Access | Description |
-| :--- | :--- | :--- | :--- |
-| `POST` | `/api/achievements` | Officer, Admin | Record cadet achievement or medal |
-| `GET` | `/api/achievements` | Private | List achievements |
-| `GET` | `/api/achievements/:id` | Private | Get achievement details |
-| `PUT` | `/api/achievements/:id` | Officer, Admin | Update achievement |
-| `DELETE` | `/api/achievements/:id` | Officer, Admin | Delete achievement |
-
-### Performance Appraisals (`/api/performance`)
-| Method | Endpoint | Access | Description |
-| :--- | :--- | :--- | :--- |
-| `POST` | `/api/performance` | Officer, Admin | Record official performance review |
-| `GET` | `/api/performance` | Private | List performance records (cadets view only own) |
-| `GET` | `/api/performance/:id` | Private | Get review details |
-| `PUT` | `/api/performance/:id` | Officer, Admin | Update review |
-| `DELETE` | `/api/performance/:id` | Officer, Admin | Delete review |
-
-### Dashboards (`/api/dashboard`)
-| Method | Endpoint | Access | Description |
-| :--- | :--- | :--- | :--- |
-| `GET` | `/api/dashboard/officer` | Officer, Admin | Contingent metrics, active counts, upcoming events |
-| `GET` | `/api/dashboard/cadet` | Cadet | Personal dossier, rank, attendance %, upcoming events |
+### Build Frontend
+```bash
+npm run client:build
+```
 
 ---
 
-## 🔒 Security Best Practices Implemented
-
-1. **Password Protection:** Salting and hashing via `bcryptjs` with 10 salt rounds; passwords excluded from query results by default (`select: false`).
-2. **Access Control:** Curried `authorize('role')` middleware guarantees that cadets cannot manipulate ranks, attendance, appraisals, or certificates.
-3. **Strict Validation:** Input sanitation, email normalization, enum restrictions, and ISO8601 date parsing via `express-validator`.
-4. **File Safety:** Restricted file extensions (JPEG, PNG, WEBP, PDF), 5MB size ceiling, filename sanitization with timestamp entropy, and non-public direct streaming for documents.
-5. **DDoS & Brute Force Prevention:** IP rate limiting via `express-rate-limit` with stricter windows for authentication endpoints.
+## 📄 License
+This project is licensed under the ISC License.
