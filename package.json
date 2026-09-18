@@ -12,7 +12,9 @@
     "client:dev": "cd client && npm run dev",
     "client:build": "cd client && npm run build",
     "dev:full": "concurrently \"npm run dev\" \"npm run client:dev\"",
-    "build": "npm run client:install && npm run client:build"
+    "build": "npm run client:install && npm run client:build",
+    "deploy:firebase": "firebase deploy --only hosting",
+    "firebase": "firebase"
   },
   "keywords": [],
   "author": "",
@@ -34,6 +36,7 @@
   },
   "devDependencies": {
     "concurrently": "^10.0.5",
+    "firebase-tools": "^15.30.2",
     "jest": "^30.5.1",
     "mongodb-memory-server": "^11.2.0",
     "nodemon": "^3.1.14",
