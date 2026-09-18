@@ -1,0 +1,590 @@
+{
+  "info": {
+    "name": "Smart NCC Cadet Management System API",
+    "_postman_id": "ncc-cadet-mgmt-api-v1",
+    "description": "Comprehensive REST API Collection for Smart NCC Cadet Management System with Role-Based Access (Admin, Officer, Cadet).",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:5000/api",
+      "type": "string"
+    },
+    {
+      "key": "token",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Health Check",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/health",
+          "host": ["{{baseUrl}}"],
+          "path": ["health"]
+        }
+      }
+    },
+    {
+      "name": "1. Authentication",
+      "item": [
+        {
+          "name": "Login - Admin",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var jsonData = pm.response.json();",
+                  "if (jsonData.data && jsonData.data.token) {",
+                  "    pm.collectionVariables.set('token', jsonData.data.token);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@ncc.gov.in\",\n  \"password\": \"Password@123\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/auth/login", "host": ["{{baseUrl}}"], "path": ["auth", "login"] }
+          }
+        },
+        {
+          "name": "Login - Officer",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var jsonData = pm.response.json();",
+                  "if (jsonData.data && jsonData.data.token) {",
+                  "    pm.collectionVariables.set('token', jsonData.data.token);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"officer.sharma@ncc.gov.in\",\n  \"password\": \"Password@123\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/auth/login", "host": ["{{baseUrl}}"], "path": ["auth", "login"] }
+          }
+        },
+        {
+          "name": "Login - Cadet",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var jsonData = pm.response.json();",
+                  "if (jsonData.data && jsonData.data.token) {",
+                  "    pm.collectionVariables.set('token', jsonData.data.token);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"cadet.rahul@ncc.gov.in\",\n  \"password\": \"Password@123\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/auth/login", "host": ["{{baseUrl}}"], "path": ["auth", "login"] }
+          }
+        },
+        {
+          "name": "Register User",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Cadet Ravi Kumar\",\n  \"email\": \"ravi.kumar@ncc.gov.in\",\n  \"password\": \"Password@123\",\n  \"role\": \"cadet\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/auth/register", "host": ["{{baseUrl}}"], "path": ["auth", "register"] }
+          }
+        },
+        {
+          "name": "Get Current Logged-in User (Me)",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{baseUrl}}/auth/me", "host": ["{{baseUrl}}"], "path": ["auth", "me"] }
+          }
+        },
+        {
+          "name": "Change Password",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"currentPassword\": \"Password@123\",\n  \"newPassword\": \"NewPassword@123\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/auth/change-password", "host": ["{{baseUrl}}"], "path": ["auth", "change-password"] }
+          }
+        },
+        {
+          "name": "Forgot Password",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"cadet.rahul@ncc.gov.in\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/auth/forgot-password", "host": ["{{baseUrl}}"], "path": ["auth", "forgot-password"] }
+          }
+        },
+        {
+          "name": "Logout",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{baseUrl}}/auth/logout", "host": ["{{baseUrl}}"], "path": ["auth", "logout"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "2. Cadet Management",
+      "item": [
+        {
+          "name": "List Cadets (Search & Filter)",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": {
+              "raw": "{{baseUrl}}/cadets?search=&unit=1 Karnataka&status=Active&page=1&limit=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["cadets"],
+              "query": [
+                { "key": "search", "value": "" },
+                { "key": "unit", "value": "1 Karnataka" },
+                { "key": "status", "value": "Active" },
+                { "key": "page", "value": "1" },
+                { "key": "limit", "value": "10" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create Cadet Profile",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"cadetId\": \"NCC/2026/KA/SD/1004\",\n  \"fullName\": \"Karan Malhotra\",\n  \"email\": \"karan.malhotra@ncc.gov.in\",\n  \"phoneNumber\": \"+91 9876543299\",\n  \"dateOfBirth\": \"2005-04-12\",\n  \"gender\": \"Male\",\n  \"institution\": \"St. Joseph Arts and Science College\",\n  \"unit\": \"1 Karnataka Battalion NCC\",\n  \"battalion\": \"1 KAR BN\",\n  \"yearSemester\": \"1st Year / Sem 1\",\n  \"bloodGroup\": \"O+\",\n  \"address\": {\n    \"street\": \"24 Church Street\",\n    \"city\": \"Bengaluru\",\n    \"state\": \"Karnataka\",\n    \"pincode\": \"560001\"\n  },\n  \"emergencyContact\": {\n    \"name\": \"Rajiv Malhotra\",\n    \"relation\": \"Father\",\n    \"phoneNumber\": \"+91 9876500099\"\n  }\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/cadets", "host": ["{{baseUrl}}"], "path": ["cadets"] }
+          }
+        },
+        {
+          "name": "Get Cadet Profile By ID",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{baseUrl}}/cadets/:id", "host": ["{{baseUrl}}"], "path": ["cadets", ":id"] }
+          }
+        },
+        {
+          "name": "Cadet View Own Profile",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{baseUrl}}/cadets/me/profile", "host": ["{{baseUrl}}"], "path": ["cadets", "me", "profile"] }
+          }
+        },
+        {
+          "name": "Cadet Update Own Permitted Info",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"phoneNumber\": \"+91 9876543298\",\n  \"address\": {\n    \"street\": \"25 Church Street Apt 4B\",\n    \"city\": \"Bengaluru\",\n    \"state\": \"Karnataka\",\n    \"pincode\": \"560001\"\n  }\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/cadets/me/update", "host": ["{{baseUrl}}"], "path": ["cadets", "me", "update"] }
+          }
+        },
+        {
+          "name": "Officer/Admin Update Cadet Profile",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"institution\": \"St. Joseph University\",\n  \"yearSemester\": \"2nd Year / Sem 3\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/cadets/:id", "host": ["{{baseUrl}}"], "path": ["cadets", ":id"] }
+          }
+        },
+        {
+          "name": "Deactivate Cadet",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{baseUrl}}/cadets/:id", "host": ["{{baseUrl}}"], "path": ["cadets", ":id"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "3. Attendance Management",
+      "item": [
+        {
+          "name": "Mark Single Attendance",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"cadet\": \"<CADET_OBJECT_ID>\",\n  \"date\": \"2026-09-16\",\n  \"sessionName\": \"Special Drill Parade Session\",\n  \"status\": \"Present\",\n  \"remarks\": \"Good rifle handling and turnout\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/attendance", "host": ["{{baseUrl}}"], "path": ["attendance"] }
+          }
+        },
+        {
+          "name": "Mark Bulk Attendance",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"date\": \"2026-09-17\",\n  \"sessionName\": \"Platoon Parade Alpha\",\n  \"records\": [\n    { \"cadet\": \"<CADET_ID_1>\", \"status\": \"Present\", \"remarks\": \"\" },\n    { \"cadet\": \"<CADET_ID_2>\", \"status\": \"Absent\", \"remarks\": \"Sick\" }\n  ]\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/attendance/bulk", "host": ["{{baseUrl}}"], "path": ["attendance", "bulk"] }
+          }
+        },
+        {
+          "name": "Get Attendance Records (Filtered)",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": {
+              "raw": "{{baseUrl}}/attendance?status=Present&startDate=2026-09-01&endDate=2026-09-30",
+              "host": ["{{baseUrl}}"],
+              "path": ["attendance"],
+              "query": [
+                { "key": "status", "value": "Present" },
+                { "key": "startDate", "value": "2026-09-01" },
+                { "key": "endDate", "value": "2026-09-30" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Cadet Attendance Summary & Rate",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{baseUrl}}/attendance/cadet/:cadetId", "host": ["{{baseUrl}}"], "path": ["attendance", "cadet", ":cadetId"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "4. Training Management",
+      "item": [
+        {
+          "name": "List Training Sessions",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{baseUrl}}/training", "host": ["{{baseUrl}}"], "path": ["training"] }
+          }
+        },
+        {
+          "name": "Create Training Session",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"trainingId\": \"TRG-2026-003\",\n  \"name\": \"Obstacle Course & Physical Conditioning\",\n  \"trainingType\": \"Obstacle Course\",\n  \"date\": \"2026-09-22\",\n  \"startTime\": \"06:00 AM\",\n  \"endTime\": \"08:00 AM\",\n  \"location\": \"Battalion Obstacle Ground\",\n  \"status\": \"Scheduled\",\n  \"remarks\": \"Boots and camouflage wear mandatory\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/training", "host": ["{{baseUrl}}"], "path": ["training"] }
+          }
+        },
+        {
+          "name": "Assign Cadets to Training",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"cadetIds\": [\"<CADET_ID_1>\", \"<CADET_ID_2>\"]\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/training/:id/assign", "host": ["{{baseUrl}}"], "path": ["training", ":id", "assign"] }
+          }
+        },
+        {
+          "name": "Cadet View Assigned Training",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{baseUrl}}/training/my-trainings", "host": ["{{baseUrl}}"], "path": ["training", "my-trainings"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "5. Camp Management",
+      "item": [
+        {
+          "name": "List Camps",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{baseUrl}}/camps", "host": ["{{baseUrl}}"], "path": ["camps"] }
+          }
+        },
+        {
+          "name": "Create NCC Camp",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"All India Thal Sainik Camp (TSC-2026)\",\n  \"campType\": \"TSC\",\n  \"description\": \"National shooting, obstacle, and tent pitching competitions\",\n  \"location\": \"DG NCC Complex, Delhi Cantt\",\n  \"startDate\": \"2026-10-05\",\n  \"endDate\": \"2026-10-16\",\n  \"status\": \"Upcoming\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/camps", "host": ["{{baseUrl}}"], "path": ["camps"] }
+          }
+        },
+        {
+          "name": "Register Cadets to Camp",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"cadetIds\": [\"<CADET_ID_1>\"]\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/camps/:id/register-cadets", "host": ["{{baseUrl}}"], "path": ["camps", ":id", "register-cadets"] }
+          }
+        },
+        {
+          "name": "Cadet View Registered Camps",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{baseUrl}}/camps/my-camps", "host": ["{{baseUrl}}"], "path": ["camps", "my-camps"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "6. Rank Management",
+      "item": [
+        {
+          "name": "Get All Ranks",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{baseUrl}}/ranks", "host": ["{{baseUrl}}"], "path": ["ranks"] }
+          }
+        },
+        {
+          "name": "Promote Cadet (Audit Trail Recorded)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"newRankId\": \"<RANK_OBJECT_ID>\",\n  \"reason\": \"Outstanding performance during annual rifle camp\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/ranks/promote/:cadetId", "host": ["{{baseUrl}}"], "path": ["ranks", "promote", ":cadetId"] }
+          }
+        },
+        {
+          "name": "Get Cadet Rank Promotion History",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{baseUrl}}/ranks/history/:cadetId", "host": ["{{baseUrl}}"], "path": ["ranks", "history", ":cadetId"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "7. Certificates",
+      "item": [
+        {
+          "name": "List Certificates",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{baseUrl}}/certificates", "host": ["{{baseUrl}}"], "path": ["certificates"] }
+          }
+        },
+        {
+          "name": "Download Certificate Document",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{baseUrl}}/certificates/:id/download", "host": ["{{baseUrl}}"], "path": ["certificates", ":id", "download"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "8. Achievements",
+      "item": [
+        {
+          "name": "List Achievements",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{baseUrl}}/achievements", "host": ["{{baseUrl}}"], "path": ["achievements"] }
+          }
+        },
+        {
+          "name": "Create Achievement Record",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"1st Place - Obstacle Course Race\",\n  \"category\": \"Sports\",\n  \"eventName\": \"Battalion Sports Meet 2026\",\n  \"position\": \"Gold Medalist\",\n  \"cadet\": \"<CADET_ID>\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/achievements", "host": ["{{baseUrl}}"], "path": ["achievements"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "9. Performance Appraisals",
+      "item": [
+        {
+          "name": "List Performance Records",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{baseUrl}}/performance", "host": ["{{baseUrl}}"], "path": ["performance"] }
+          }
+        },
+        {
+          "name": "Create Performance Appraisal",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"cadet\": \"<CADET_ID>\",\n  \"assessmentPeriod\": \"Q2 2026 Assessment\",\n  \"paradePerformance\": { \"rating\": \"Outstanding\", \"remarks\": \"Precise drill\" },\n  \"discipline\": { \"rating\": \"Excellent\", \"remarks\": \"No infractions\" },\n  \"trainingPerformance\": { \"rating\": \"Good\", \"remarks\": \"Passes all tests\" },\n  \"participation\": { \"rating\": \"Excellent\", \"remarks\": \"Attends all sessions\" },\n  \"leadership\": { \"rating\": \"Excellent\", \"remarks\": \"Commands with authority\" },\n  \"physicalTraining\": { \"rating\": \"Good\", \"remarks\": \"Fit and active\" },\n  \"overallRemarks\": \"Good progress throughout term\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/performance", "host": ["{{baseUrl}}"], "path": ["performance"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "10. Dashboards",
+      "item": [
+        {
+          "name": "Officer Dashboard (Overview Metrics)",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{baseUrl}}/dashboard/officer", "host": ["{{baseUrl}}"], "path": ["dashboard", "officer"] }
+          }
+        },
+        {
+          "name": "Cadet Dashboard (Personal Dossier)",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{baseUrl}}/dashboard/cadet", "host": ["{{baseUrl}}"], "path": ["dashboard", "cadet"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "11. Unit Management",
+      "item": [
+        {
+          "name": "List Units",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{baseUrl}}/units", "host": ["{{baseUrl}}"], "path": ["units"] }
+          }
+        },
+        {
+          "name": "Create Unit",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"unitName\": \"4 Karnataka Battalion NCC\",\n  \"battalion\": \"4 KAR BN\",\n  \"directorate\": \"Karnataka & Goa Directorate\",\n  \"location\": \"Hubballi, Karnataka\",\n  \"description\": \"Infantry training unit\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/units", "host": ["{{baseUrl}}"], "path": ["units"] }
+          }
+        }
+      ]
+    }
+  ]
+}
+
